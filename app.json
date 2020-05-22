@@ -1,0 +1,27 @@
+{
+  "name": "LINE Feature Survey & Integration",
+  "description": "Sample Application for LINE Login & Messaging-API",
+  "repository": "https://github.com/yzcheng/ns-lineweb",
+  "env": {
+    "LINE_BOT_CHANNELSECRET": {
+      "description": "Bot Channel secret",
+      "required": true
+    },
+    "LINE_BOT_CHANNELTOKEN": {
+      "description": "Bot Channel access token",
+      "required": true
+    },
+    "LINECORP_PLATFORM_CHANNEL_CHANNELID": {
+      "description": "Channel ID",
+      "required": true
+    },
+    "LINECORP_PLATFORM_CHANNEL_CHANNELSECRET": {
+      "description": "Channel secret",
+      "required": true
+    },
+    "LINECORP_PLATFORM_CHANNEL_CALLBACKURL": {
+      "description": "Callback URL",
+      "required": true
+    }
+  }
+}
