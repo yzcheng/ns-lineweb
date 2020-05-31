@@ -14,16 +14,22 @@ import javax.persistence.TemporalType;
 public class LineEmpMap {
 
 	@Id
-	@Column(name = "LINE_UID", length=64, nullable=false)
+	@Column(name = "LINE_UID", length = 64, nullable = false)
 	private String lineUid;
 
-	@Column(name = "DISPLAY_NAME", length=64)
-	private String displayName;
+	@Column(name = "LINE_NAME", length = 64)
+	private String lineName;
 
-	@Column(name = "EMP_ID", length=32)
+	@Column(name = "LINE_PIC_URL", length = 128)
+	private String linePicUrl;
+
+	@Column(name = "EMP_ID", length = 32)
 	private String empId;
 
-	@Column(name = "STATUS", length=1)
+	@Column(name = "ROLE", length = 32)
+	private String role;
+
+	@Column(name = "STATUS", length = 1)
 	private String status;
 
 	@Column(name = "CREATE_DT")
@@ -42,12 +48,20 @@ public class LineEmpMap {
 		this.lineUid = lineUid;
 	}
 
-	public String getDisplayName() {
-		return displayName;
+	public String getLineName() {
+		return lineName;
 	}
 
-	public void setDisplayName(String displayName) {
-		this.displayName = displayName;
+	public void setLineName(String lineName) {
+		this.lineName = lineName;
+	}
+
+	public String getLinePicUrl() {
+		return linePicUrl;
+	}
+
+	public void setLinePicUrl(String linePicUrl) {
+		this.linePicUrl = linePicUrl;
 	}
 
 	public String getEmpId() {
@@ -56,6 +70,14 @@ public class LineEmpMap {
 
 	public void setEmpId(String empId) {
 		this.empId = empId;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 	public String getStatus() {

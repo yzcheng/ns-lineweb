@@ -17,23 +17,24 @@ package idv.tw.nslineweb.infra.line.api.v2;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.function.Function;
 import java.util.List;
+import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.linecorp.bot.model.profile.UserProfileResponse;
 
 import idv.tw.nslineweb.infra.http.Client;
 import idv.tw.nslineweb.infra.line.api.v2.response.AccessToken;
 import idv.tw.nslineweb.infra.line.api.v2.response.IdToken;
 import idv.tw.nslineweb.infra.line.api.v2.response.Verify;
 import retrofit2.Call;
-
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import com.auth0.jwt.exceptions.JWTDecodeException;
 
 /**
  * <p>LINE v2 API Access</p>
@@ -50,10 +51,6 @@ public class LineAPIService {
     private String channelSecret;
     @Value("${linecorp.platform.channel.callbackUrl}")
     private String callbackUrl;
-
-//		private String channelId="1654238948";
-//		private String channelSecret="780c9f70421a0544a09b982f1e6a75f1";
-//		private String callbackUrl="https://ns-lineweb.herokuapp.com/auth";
     
     public AccessToken accessToken(String code) {
         return getClient(t -> t.accessToken(
@@ -83,7 +80,11 @@ public class LineAPIService {
                 channelId,
                 channelSecret));
     }
-
+    
+    public UserProfileResponse profile(final AccessToken accessToken) {
+    	return getClient(t -> t.profile("Bearer " + accessToken.access_token));
+    }
+    
     public IdToken idToken(String id_token) {
         try {
             DecodedJWT jwt = JWT.decode(id_token);

@@ -51,7 +51,7 @@ public class WebController {
     private LineAPIService lineAPIService;
 
     @Autowired
-    private LineEmpMapService lineEmpMapService;
+    private DataServiceController dataService;
     
     /**
      * <p>LINE Login Button Page
@@ -145,24 +145,27 @@ public class WebController {
         }
         model.addAttribute("idToken", idToken);
         
-        LineEmpMap lineEmp = lineEmpMapService.findById(idToken.sub).orElse(new LineEmpMap());
+        LineEmpMap lineEmp = dataService.lineEmpMapService.findById(idToken.sub).orElse(new LineEmpMap());
 		if(StringUtils.isBlank(lineEmp.getLineUid()))
 		{
 			lineEmp.setLineUid(idToken.sub);
-			lineEmp.setDisplayName(idToken.name);
+			lineEmp.setLineName(idToken.name);
+			lineEmp.setLinePicUrl(idToken.picture);
 			lineEmp.setStatus("W");
 			lineEmp.setCreateDt(new Date());
 			lineEmp.setLastLoginDt(new Date());
-			lineEmpMapService.saveAndFlush(lineEmp);
+			dataService.lineEmpMapService.saveAndFlush(lineEmp);
 		}
 		else
 		{
-			lineEmp.setDisplayName(idToken.name);
+			lineEmp.setLineName(idToken.name);
+			lineEmp.setLinePicUrl(idToken.picture);
 			lineEmp.setLastLoginDt(new Date());
-			lineEmpMapService.saveAndFlush(lineEmp);
+			dataService.lineEmpMapService.saveAndFlush(lineEmp);
 		}
         
-        return "user/success";
+        //return "user/success";
+		return "redirect:/index.html";
     }
 
     /**
@@ -180,5 +183,4 @@ public class WebController {
     public String sessionError() {
         return "user/session_error";
     }
-
 }

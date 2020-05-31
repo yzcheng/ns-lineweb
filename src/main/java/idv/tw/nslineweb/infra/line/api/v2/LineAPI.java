@@ -15,14 +15,17 @@
  */
 package idv.tw.nslineweb.infra.line.api.v2;
 
+import com.linecorp.bot.model.profile.UserProfileResponse;
+
 import idv.tw.nslineweb.infra.line.api.v2.response.AccessToken;
 import idv.tw.nslineweb.infra.line.api.v2.response.Verify;
 import retrofit2.Call;
-import retrofit2.http.GET;
-import retrofit2.http.POST;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Headers;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 /**
@@ -62,5 +65,9 @@ public interface LineAPI {
             @Field("client_id") String client_id,
             @Field("client_secret") String client_secret);
 
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @GET("v2/profile")
+    Call<UserProfileResponse> profile(
+    		@Header("Authorization") String access_token);   
 }
 

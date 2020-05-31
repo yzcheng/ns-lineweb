@@ -18,11 +18,17 @@ package idv.tw.nslineweb.application.controller;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.linecorp.bot.client.LineMessagingClient;
+import com.linecorp.bot.model.PushMessage;
+import com.linecorp.bot.model.message.TextMessage;
+import com.linecorp.bot.model.profile.UserProfileResponse;
+
 import idv.tw.nslineweb.db.LineEmpMap;
-import idv.tw.nslineweb.db.LineEmpMapService;
 import idv.tw.nslineweb.infra.line.api.v2.LineAPIService;
 import idv.tw.nslineweb.infra.line.api.v2.response.AccessToken;
 import idv.tw.nslineweb.infra.line.api.v2.response.IdToken;
@@ -34,8 +40,11 @@ public class APIController {
     @Autowired
     private LineAPIService lineAPIService;
 
-    @Autowired
-    private LineEmpMapService lineEmpMapService;
+	@Autowired
+	private LineMessagingClient lineMessagingClient;
+	
+	@Autowired
+	private DataServiceController dataService;
     
     @RequestMapping("api/refreshToken")
     public AccessToken refreshToken(HttpSession httpSession) {
@@ -73,13 +82,42 @@ public class APIController {
     private void setAccessToken(HttpSession httpSession, AccessToken accessToken) {
         httpSession.setAttribute(WebController.ACCESS_TOKEN, accessToken);
     }
+    
+    @CrossOrigin
+    @RequestMapping("api/getUserProfile")
+    public LineEmpMap getUserProfile(HttpSession httpSession) throws Exception {
+    	final AccessToken token = getAccessToken(httpSession);
+    	if(token == null)
+    	{
+    		throw new Exception("unvalid user");
+    	}
+    	IdToken idToken = lineAPIService.idToken(token.id_token);
+    	LineEmpMap emp = dataService.lineEmpMapService.findById(idToken.sub).orElse(new LineEmpMap());
+        return emp;
+    }
 
     @RequestMapping("api/showMyRecord")
     public LineEmpMap showMyRecord(HttpSession httpSession) {
     	final AccessToken token = getAccessToken(httpSession);
     	IdToken idToken = lineAPIService.idToken(token.id_token);
-    	LineEmpMap emp = lineEmpMapService.findById(idToken.sub).orElse(new LineEmpMap());
+    	LineEmpMap emp = dataService.lineEmpMapService.findById(idToken.sub).orElse(new LineEmpMap());
         return emp;
     }
 
+    @RequestMapping("api/profile")
+    public UserProfileResponse showProfile(HttpSession httpSession) {
+    	final AccessToken token = getAccessToken(httpSession);
+    	UserProfileResponse profile = lineAPIService.profile(token);
+    	return profile;
+    }
+    
+    @RequestMapping("api/pushMessage")
+    public void pushMessage(HttpSession httpSession, @RequestParam(name="message") String text) {
+    	//web token -> user id by this channel.
+    	final AccessToken token = getAccessToken(httpSession);
+    	UserProfileResponse profile = lineAPIService.profile(token);
+    	
+    	lineMessagingClient.pushMessage(new PushMessage(profile.getUserId(), new TextMessage(text)));
+    }
+    
 }

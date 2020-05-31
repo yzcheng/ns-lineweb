@@ -10,31 +10,18 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "MF_TRANS")
-public class MfTrans {
+@Table(name = "MF_PACKAGE_PROC")
+public class MfPackageProc {
 
 	@Id
-	@Column(name = "TRANS_ID", length = 32)
-	private String transId;
-
-	@Column(name = "ORDER_ID", length = 32)
-	private String orderId;
+	@Column(name = "PROC_ID", length = 32)
+	private String procId;
 
 	@Column(name = "PACK_ID", length = 32)
 	private String packId;
 
-	@Column(name = "MF_AMOUNT")
-	private long mfAmount;
-
-	@Column(name = "MF_MATERIAL", length = 32)
-	private String mfMaterial;
-
-	@Column(name = "MF_DATE")
-	@Temporal(TemporalType.DATE)
-	private Date mfDate;
-
-	@Column(name = "STATUS", length = 16)
-	private String status;
+	@Column(name = "SEQ_NO")
+	private int seqNo;
 
 	@Column(name = "CREATE_DT")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -50,26 +37,12 @@ public class MfTrans {
 	@Column(name = "UPDATE_USER", length = 32)
 	private String updateUser;
 
-	public static MfTrans from(String orderId) {
-		MfTrans trans = new MfTrans();
-		trans.setOrderId(orderId);
-		return trans;
+	public String getProcId() {
+		return procId;
 	}
 
-	public String getTransId() {
-		return transId;
-	}
-
-	public void setTransId(String transId) {
-		this.transId = transId;
-	}
-
-	public String getOrderId() {
-		return orderId;
-	}
-
-	public void setOrderId(String orderId) {
-		this.orderId = orderId;
+	public void setProcId(String procId) {
+		this.procId = procId;
 	}
 
 	public String getPackId() {
@@ -80,28 +53,12 @@ public class MfTrans {
 		this.packId = packId;
 	}
 
-	public long getMfAmount() {
-		return mfAmount;
+	public int getSeqNo() {
+		return seqNo;
 	}
 
-	public void setMfAmount(long mfAmount) {
-		this.mfAmount = mfAmount;
-	}
-
-	public String getMfMaterial() {
-		return mfMaterial;
-	}
-
-	public void setMfMaterial(String mfMaterial) {
-		this.mfMaterial = mfMaterial;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
+	public void setSeqNo(int seqNo) {
+		this.seqNo = seqNo;
 	}
 
 	public Date getCreateDt() {
@@ -118,14 +75,6 @@ public class MfTrans {
 
 	public void setCreateUser(String createUser) {
 		this.createUser = createUser;
-	}
-
-	public Date getMfDate() {
-		return mfDate;
-	}
-
-	public void setMfDate(Date mfDate) {
-		this.mfDate = mfDate;
 	}
 
 	public Date getUpdateDt() {

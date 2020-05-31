@@ -17,13 +17,13 @@ public class MfOrder {
 	@Column(name = "ORDER_ID", length = 32)
 	private String orderId;
 
-	@Column(name = "PROC_ID", length = 32)
-	private String procId;
+	@Column(name = "PROD_ID", length = 32)
+	private String prodId;
 
 	@Column(name = "PROD_SPEC", length = 64)
 	private String prodSpec;
 
-	@Column(name = "CUST_CODE", length = 8)
+	@Column(name = "CUST_CODE", length = 16)
 	private String custCode;
 
 	@Column(name = "AMOUNT")
@@ -33,9 +33,8 @@ public class MfOrder {
 	@Temporal(TemporalType.DATE)
 	private Date shipDate;
 
-	@Column(name = "MF_DATE")
-	@Temporal(TemporalType.DATE)
-	private Date mfDate;
+	@Column(name = "STATUS", length = 1)
+	private String status;
 
 	@Column(name = "CREATE_DT")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -59,12 +58,12 @@ public class MfOrder {
 		this.orderId = orderId;
 	}
 
-	public String getProcId() {
-		return procId;
+	public String getProdId() {
+		return prodId;
 	}
 
-	public void setProcId(String procId) {
-		this.procId = procId;
+	public void setProdId(String prodId) {
+		this.prodId = prodId;
 	}
 
 	public String getProdSpec() {
@@ -99,14 +98,6 @@ public class MfOrder {
 		this.shipDate = shipDate;
 	}
 
-	public Date getMfDate() {
-		return mfDate;
-	}
-
-	public void setMfDate(Date mfDate) {
-		this.mfDate = mfDate;
-	}
-
 	public Date getCreateDt() {
 		return createDt;
 	}
@@ -139,4 +130,19 @@ public class MfOrder {
 		this.updateUser = updateUser;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	@Override
+	public String toString() {
+		return "MfOrder [orderId=" + orderId + ", prodId=" + prodId + ", prodSpec=" + prodSpec + ", custCode="
+				+ custCode + ", amount=" + amount + ", shipDate=" + shipDate + ", status=" + status + ", createDt="
+				+ createDt + ", createUser=" + createUser + ", updateDt=" + updateDt + ", updateUser=" + updateUser
+				+ "]";
+	}
 }

@@ -10,28 +10,23 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "MF_TRANS")
-public class MfTrans {
-
+@Table(name = "MF_PACKAGE")
+public class MfPackage {
 	@Id
-	@Column(name = "TRANS_ID", length = 32)
-	private String transId;
+	@Column(name = "PACK_ID", length = 32)
+	private String packId;
 
 	@Column(name = "ORDER_ID", length = 32)
 	private String orderId;
 
-	@Column(name = "PACK_ID", length = 32)
-	private String packId;
+	@Column(name = "DATE_CODE", length = 32)
+	private String dateCode;
 
-	@Column(name = "MF_AMOUNT")
-	private long mfAmount;
+	@Column(name = "LOT_NUM", length = 32)
+	private String lotNum;
 
-	@Column(name = "MF_MATERIAL", length = 32)
-	private String mfMaterial;
-
-	@Column(name = "MF_DATE")
-	@Temporal(TemporalType.DATE)
-	private Date mfDate;
+	@Column(name = "PASS_AMOUNT")
+	private long passAmount;
 
 	@Column(name = "STATUS", length = 16)
 	private String status;
@@ -50,18 +45,12 @@ public class MfTrans {
 	@Column(name = "UPDATE_USER", length = 32)
 	private String updateUser;
 
-	public static MfTrans from(String orderId) {
-		MfTrans trans = new MfTrans();
-		trans.setOrderId(orderId);
-		return trans;
+	public String getPackId() {
+		return packId;
 	}
 
-	public String getTransId() {
-		return transId;
-	}
-
-	public void setTransId(String transId) {
-		this.transId = transId;
+	public void setPackId(String packId) {
+		this.packId = packId;
 	}
 
 	public String getOrderId() {
@@ -72,36 +61,28 @@ public class MfTrans {
 		this.orderId = orderId;
 	}
 
-	public String getPackId() {
-		return packId;
+	public String getDateCode() {
+		return dateCode;
 	}
 
-	public void setPackId(String packId) {
-		this.packId = packId;
+	public void setDateCode(String dateCode) {
+		this.dateCode = dateCode;
 	}
 
-	public long getMfAmount() {
-		return mfAmount;
+	public String getLotNum() {
+		return lotNum;
 	}
 
-	public void setMfAmount(long mfAmount) {
-		this.mfAmount = mfAmount;
+	public void setLotNum(String lotNum) {
+		this.lotNum = lotNum;
 	}
 
-	public String getMfMaterial() {
-		return mfMaterial;
+	public long getPassAmount() {
+		return passAmount;
 	}
 
-	public void setMfMaterial(String mfMaterial) {
-		this.mfMaterial = mfMaterial;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
+	public void setPassAmount(long passAmount) {
+		this.passAmount = passAmount;
 	}
 
 	public Date getCreateDt() {
@@ -120,12 +101,12 @@ public class MfTrans {
 		this.createUser = createUser;
 	}
 
-	public Date getMfDate() {
-		return mfDate;
+	public String getStatus() {
+		return status;
 	}
 
-	public void setMfDate(Date mfDate) {
-		this.mfDate = mfDate;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public Date getUpdateDt() {
