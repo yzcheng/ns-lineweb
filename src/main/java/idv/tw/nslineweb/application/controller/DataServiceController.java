@@ -24,6 +24,10 @@ import idv.tw.nslineweb.db.MfTransProc;
 import idv.tw.nslineweb.db.MfTransProcService;
 import idv.tw.nslineweb.db.MfTransService;
 
+/**
+ * Store Business Logic.
+ * @author Kenny
+ */
 @CrossOrigin
 @RestController
 public class DataServiceController {
@@ -80,28 +84,36 @@ public class DataServiceController {
 		}
 		
 	}
-	@RequestMapping("service/insertTrans")
-	public MfTrans insertTrans(HttpSession httpSession, @RequestBody MfTrans mainTrans) throws Exception {
-		int seq = findTransByOrderId(httpSession, mainTrans.getOrderId()).size();
+	
+	@RequestMapping("service/createTransferForm")
+	public String createTransferForm(HttpSession httpSession, @RequestBody String orderId) throws Exception {
+		int seq = findTransByOrderId(httpSession, orderId).size();
 		
-		//mainTrans.setCreateUser("");
-		mainTrans.setTransId(String.format("%s-%s", mainTrans.getOrderId(), seq));
+		//save Main Transfer Form
+		MfTrans mainTrans = new MfTrans();
+		mainTrans.setTransId(String.format("%s-%s", orderId, seq + 1)); //TransID = OrderID + "-" + Sequence
+		mainTrans.setOrderId(orderId);
 		mainTrans.setStatus(MainTransStatus.INIT.dbVal);
+		mainTrans.setCreateDt(new Date());
+		//mainTrans.setCreateUser("");
 		mfTransService.save(mainTrans);
 		System.out.println(String.format("insert main trans...successful => %s(from order %s)", mainTrans.getTransId(), mainTrans.getOrderId()));
 
-		//TODO the transProcId will assign by user to line paper
-		MfTransProc forming = new MfTransProc(mainTrans.getTransId() + "-01", mainTrans.getTransId() , 1, new Date(), mainTrans.getCreateUser());
-		MfTransProc sintering = new MfTransProc(mainTrans.getTransId() + "-01", mainTrans.getTransId(), 2, new Date(), mainTrans.getCreateUser());
-		MfTransProc grinding = new MfTransProc(mainTrans.getTransId() + "-01", mainTrans.getTransId(), 3, new Date(), mainTrans.getCreateUser());
 		
+		//save Sub Process Form
+		//TODO the transProcId will assign by user to link paper
+		MfTransProc forming = new MfTransProc(mainTrans.getTransId() + "-01", mainTrans.getTransId() , 1, new Date(), mainTrans.getCreateUser());
+		MfTransProc sintering = new MfTransProc(mainTrans.getTransId() + "-02", mainTrans.getTransId(), 2, new Date(), mainTrans.getCreateUser());
+		MfTransProc grinding = new MfTransProc(mainTrans.getTransId() + "-03", mainTrans.getTransId(), 3, new Date(), mainTrans.getCreateUser());
 		mfTransProcService.saveAll(Arrays.asList(forming, sintering, grinding));
 		System.out.println(String.format("insert sub trans...successful => %s(from order %s)", forming.getProcId(), mainTrans.getTransId()));
 		System.out.println(String.format("insert sub trans...successful => %s(from order %s)", sintering.getProcId(), mainTrans.getTransId()));
 		System.out.println(String.format("insert sub trans...successful => %s(from order %s)", grinding.getProcId(), mainTrans.getTransId()));
 		
 		//TODO the returns will include transId & subProcId list.
-		return mainTrans;
+		StringBuffer sb = new StringBuffer();
+		sb.append(forming.getProcId()).append(";").append(sintering.getProcId()).append(";").append(grinding.getProcId());
+		return String.format("https://line.me/R/oaMessage/@%s/?[移轉單]TRANS_ID=%s&PROC_ID_LIST%s<--請勿刪除[]內的訊息", botId, mainTrans.getTransId(), sb.toString());
 	}
 	
 	@RequestMapping("service/deleteTrans")
@@ -111,8 +123,13 @@ public class DataServiceController {
 		return mainTrans;
 	}
 	
+	@RequestMapping("service/findTransInfo")
+	public MfTrans findTransInfo(HttpSession httpSession, @RequestBody String transId) throws Exception{
+		return mfTransService.findById(transId).orElse(null);
+	}
+	
 	@RequestMapping("service/findTransByOrderId")
-	public List<MfTrans> findTransByOrderId(HttpSession httpSession, @RequestParam(name="orderId") String orderId) throws Exception{
+	public List<MfTrans> findTransByOrderId(HttpSession httpSession, @RequestBody String orderId) throws Exception{
 		Example<MfTrans> example = Example.of(MfTrans.from(orderId));
 		return mfTransService.findAll(example);
 	}

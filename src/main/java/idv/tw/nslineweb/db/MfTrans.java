@@ -24,7 +24,7 @@ public class MfTrans {
 	private String packId;
 
 	@Column(name = "MF_AMOUNT")
-	private long mfAmount;
+	private Long mfAmount;
 
 	@Column(name = "MF_MATERIAL", length = 32)
 	private String mfMaterial;
@@ -80,11 +80,11 @@ public class MfTrans {
 		this.packId = packId;
 	}
 
-	public long getMfAmount() {
+	public Long getMfAmount() {
 		return mfAmount;
 	}
 
-	public void setMfAmount(long mfAmount) {
+	public void setMfAmount(Long mfAmount) {
 		this.mfAmount = mfAmount;
 	}
 

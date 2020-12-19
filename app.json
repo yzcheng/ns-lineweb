@@ -22,6 +22,10 @@
     "LINECORP_PLATFORM_CHANNEL_CALLBACKURL": {
       "description": "Callback URL",
       "required": true
+    },
+    "LINE_BOT_ID": {
+      "description": "Callback URL",
+      "required": true
     }
   }
 }
